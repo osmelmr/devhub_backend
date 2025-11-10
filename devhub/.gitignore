@@ -1,0 +1,109 @@
+# =========================
+# Django + DRF + JWT Project
+# =========================
+
+# --- Entorno virtual ---
+venv/
+.env
+.env.* 
+*.env
+
+# --- Archivos compilados de Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Archivos de migraciones (puedes incluirlos si quieres versionarlas) ---
+# Si no quieres ignorarlas, comenta la siguiente línea
+*/migrations/__pycache__/
+*/migrations/*.pyc
+*/migrations/*.py~
+*/migrations/*.log
+
+# --- Archivos temporales / cachés ---
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.sqlite
+*.tmp
+*.swp
+*.bak
+*.orig
+*.old
+
+# --- Archivos de configuración locales ---
+*.local
+*.cfg
+*.ini
+*.DS_Store
+Thumbs.db
+
+# --- Archivos de JetBrains / VSCode ---
+.idea/
+.vscode/
+*.code-workspace
+
+# --- Archivos de coverage / testing ---
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.tox/
+nosetests.xml
+*.cover
+*.log
+.cache/
+
+# --- Archivos estáticos / media generados ---
+staticfiles/
+media/
+static/
+dist/
+build/
+assets/
+
+# --- Archivos de compilación de frontend (si hay integración con React u otro) ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# --- Archivos de Docker (si lo usas más adelante) ---
+*.pid
+*.seed
+*.pid.lock
+
+# --- Configuración de SQLite (opcional) ---
+db.sqlite3
+
+# --- Archivos de backup / exportaciones ---
+*.tar
+*.zip
+*.gz
+*.rar
+
+# --- Archivos temporales de desarrollo ---
+*.sublime-project
+*.sublime-workspace
+
+# --- Carpeta de tus apps personalizadas ---
+# (Solo si generas datos locales dentro de ellas)
+apps/**/__pycache__/
+apps/**/migrations/__pycache__/
+apps/**/migrations/*.pyc
+
+# --- Archivos de configuración de servidor ---
+*.pem
+*.key
+*.crt
+*.pub
+
+# --- Cache de Django ---
+*.cache/
+django_cache/
