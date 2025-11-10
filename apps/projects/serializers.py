@@ -1,0 +1,21 @@
+from rest_framework import serializers
+from .models import Project
+
+class ProjectSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+
+    class Meta:
+        model = Project
+        fields = [
+            'id',
+            'title',
+            'slug',
+            'description',
+            'thumbnail',
+            'tech_stack',
+            'status',
+            'user',
+            'username',
+            'created_at',
+            'updated_at',
+        ]
