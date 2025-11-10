@@ -4,15 +4,18 @@ from rest_framework import status
 from .models import Project
 from .serializers import ProjectSerializer
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from devhub.permissions import IsAdminUser
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def list_projects(request):
     projects = Project.objects.all()
     serializer = ProjectSerializer(projects, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def retrieve_project(request, pk):
     try:
         project = Project.objects.get(pk=pk)
@@ -22,6 +25,7 @@ def retrieve_project(request, pk):
     return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
 def create_project(request):
     serializer = ProjectSerializer(data=request.data)
     if serializer.is_valid():
@@ -30,6 +34,7 @@ def create_project(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
 def update_project(request, pk):
     try:
         project = Project.objects.get(pk=pk)
@@ -42,6 +47,7 @@ def update_project(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
 def delete_project(request, pk):
     try:
         project = Project.objects.get(pk=pk)
@@ -51,6 +57,7 @@ def delete_project(request, pk):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
 def bulk_delete_projects(request):
     ids = request.data.get('ids', [])
     Project.objects.filter(id__in=ids).delete()

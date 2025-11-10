@@ -4,15 +4,18 @@ from rest_framework import status
 from .models import User
 from .serializers import UserSerializer
 from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from devhub.permissions import IsAdminUser
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def list_users(request):
     users = User.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def retrieve_user(request, pk):
     try:
         user = User.objects.get(pk=pk)
@@ -22,6 +25,7 @@ def retrieve_user(request, pk):
     return Response(serializer.data)
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
 def create_user(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
@@ -30,6 +34,7 @@ def create_user(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT', 'PATCH'])
+@permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
 def update_user(request, pk):
     try:
         user = User.objects.get(pk=pk)
@@ -42,6 +47,7 @@ def update_user(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
 def delete_user(request, pk):
     try:
         user = User.objects.get(pk=pk)
@@ -51,6 +57,7 @@ def delete_user(request, pk):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
 def bulk_delete_users(request):
     ids = request.data.get('ids', [])
     User.objects.filter(id__in=ids).delete()
