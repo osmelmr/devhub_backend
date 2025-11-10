@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import User
 from .serializers import UserSerializer
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['GET'])
 def list_users(request):

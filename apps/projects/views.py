@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Project
 from .serializers import ProjectSerializer
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['GET'])
 def list_projects(request):
