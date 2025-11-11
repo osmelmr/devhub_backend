@@ -16,9 +16,18 @@ def list_projects(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticatedOrReadOnly])
+def list_own_projects(request):
+    projects = Project.objects.filter(user = request.user)
+    serializer = ProjectSerializer(projects, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticatedOrReadOnly])
 def retrieve_project(request, pk):
     try:
         project = Project.objects.get(pk=pk)
+        if  project.user != request.user:
+            return Response({'error':f'{project.title} is not your project'}, status=status.HTTP_403_FORBIDDEN)
     except Project.DoesNotExist:
         return Response({'error': 'Project not found'}, status=status.HTTP_404_NOT_FOUND)
     serializer = ProjectSerializer(project)
@@ -29,7 +38,7 @@ def retrieve_project(request, pk):
 def create_project(request):
     serializer = ProjectSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -38,6 +47,8 @@ def create_project(request):
 def update_project(request, pk):
     try:
         project = Project.objects.get(pk=pk)
+        if  project.user != request.user:
+            return Response({'error':f'{project.title} is not your project'}, status=status.HTTP_403_FORBIDDEN)
     except Project.DoesNotExist:
         return Response({'error': 'Project not found'}, status=status.HTTP_404_NOT_FOUND)
     serializer = ProjectSerializer(project, data=request.data, partial=True)
@@ -51,6 +62,8 @@ def update_project(request, pk):
 def delete_project(request, pk):
     try:
         project = Project.objects.get(pk=pk)
+        if  project.user != request.user:
+            return Response({'error':f'{project.title} is not your project'}, status=status.HTTP_403_FORBIDDEN)
     except Project.DoesNotExist:
         return Response({'error': 'Project not found'}, status=status.HTTP_404_NOT_FOUND)
     project.delete()
@@ -60,5 +73,9 @@ def delete_project(request, pk):
 @permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
 def bulk_delete_projects(request):
     ids = request.data.get('ids', [])
-    Project.objects.filter(id__in=ids).delete()
+    projects = Project.objects.filter(id__in=ids)
+    for project in projects:
+        if  project.user != request.user:
+            return Response({'error': f'{project.title} is not your project'}, status=status.HTTP_403_FORBIDDEN)
+        project.delete()
     return Response({'deleted_ids': ids}, status=status.HTTP_204_NO_CONTENT)
