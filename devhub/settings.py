@@ -11,21 +11,38 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os, environ
+
+# Inicializa el entorno
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / "subdir".
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Lee el archivo .env
+#esto es simplemente una variable que accede a el entorno .env activo y busca la variable DJANGO_ENV
+#si no esta por defecto pone dev
+enviroment = os.getenv("DJANGO_ENV","dev")
+# concatena .env. con el valor de la variable al final solo resulta un texto que dice .env.dev o .env.prod
+env_file = f".env.{enviroment}"
+# environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+environ.Env.read_env(os.path.join(BASE_DIR, env_file))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-(ptgjzu$=5*)#!ut&69-2!uta3l!oc15el7_-@p_@*#k^fq&r!"
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+DEBUG = env('DEBUG')
+
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
 
 
 # Application definition
@@ -68,13 +85,13 @@ REST_FRAMEWORK = {
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": env("ACCESS_TOKEN_LIFETIME_MINUTES"),
+    "REFRESH_TOKEN_LIFETIME": env("REFRESH_TOKEN_LIFETIME_DAYS"),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = env.bool("CORS_ALLOW_ALL_ORIGINS")
 
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:5173",
@@ -104,10 +121,7 @@ WSGI_APPLICATION = "devhub.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": env.db()
 }
 
 
@@ -151,3 +165,4 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+print(f"🧭 Django está usando el entorno: {enviroment} desde {env_file}")

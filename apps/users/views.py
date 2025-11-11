@@ -1,18 +1,20 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from .models import User
 from .serializers import UserSerializer
-from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from devhub.permissions import IsAdminUser
+from devhub.pagination import StandardResultsSetPagination
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticatedOrReadOnly])
 def list_users(request):
     users = User.objects.all()
-    serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
+    paginator = StandardResultsSetPagination()
+    paginated_users = paginator.paginate_queryset(users, request)
+    serializer = UserSerializer(paginated_users, many=True)
+    return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticatedOrReadOnly])
