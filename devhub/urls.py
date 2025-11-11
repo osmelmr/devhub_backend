@@ -20,9 +20,14 @@ from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
+    # Admin
     path("admin/", admin.site.urls),
-    path('api/users/', include('apps.users.urls')),
-    path('api/projects/', include('apps.projects.urls')),
+    # Auth
     path("api/tokens/", TokenObtainPairView.as_view()),
     path("api/refresh/", TokenRefreshView.as_view()),
+    # My apis
+    path('api/users/', include('apps.users.urls')),
+    path('api/projects/', include('apps.projects.urls')),
+    path('api/todos/', include('apps.todos.urls')),
+    
 ]
