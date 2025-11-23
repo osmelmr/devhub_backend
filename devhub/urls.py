@@ -23,11 +23,11 @@ urlpatterns = [
     # Admin
     path("admin/", admin.site.urls),
     # Auth
-    path("api/tokens/", TokenObtainPairView.as_view()),
-    path("api/refresh/", TokenRefreshView.as_view()),
+    path("api/v1/auth/token/", TokenObtainPairView.as_view()),
+    path("api/v1/auth/token/refresh/", TokenRefreshView.as_view()),
     # My apis
-    path('api/users/', include('apps.users.urls')),
-    path('api/projects/', include('apps.projects.urls')),
-    path('api/todos/', include('apps.todos.urls')),
+    path('api/v1/users/', include('apps.users.urls')),
+    path('api/v1/projects/', include('apps.projects.urls')),
+    path('api/v1/todos/', include('apps.todos.urls')),
     
 ]
