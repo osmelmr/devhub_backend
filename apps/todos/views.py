@@ -69,7 +69,7 @@ def delete_todo(request, pk):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticatedOrReadOnly])
-def bulk_delete_todos(request):
+def delete_todos(request):
     ids = request.data.get('ids', [])
     todos = Todo.objects.filter(id__in=ids)
     deleted_ids = []

@@ -8,5 +8,5 @@ urlpatterns = [
     path('create/', views.create_todo, name='create_todo'),
     path('<int:pk>/update/', views.update_todo, name='update_todo'),
     path('<int:pk>/delete/', views.delete_todo, name='delete_todo'),
-    path('bulk-delete/', views.bulk_delete_todos, name='bulk_delete_todos'),
+    path('delete/', views.delete_todos, name='delete_todos'),
 ]
