@@ -10,6 +10,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'slug',
+            'short_description',
             'description',
             'thumbnail',
             'tech_stack',
