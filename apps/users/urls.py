@@ -7,6 +7,6 @@ urlpatterns = [
     path('create/', views.create_user, name='create_user'),
     path('update/<uuid:pk>/', views.update_user, name='update_user'),
     path('delete/<uuid:pk>/', views.delete_user, name='delete_user'),
-    path('bulk-delete/', views.bulk_delete_users, name='bulk_delete_users'),
+    path('delete/', views.delete_users, name='delete_users'),
     path('me/', views.me, name="me"),
 ]

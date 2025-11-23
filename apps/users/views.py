@@ -74,7 +74,7 @@ def delete_user(request, pk):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
-def bulk_delete_users(request):
+def delete_users(request):
     ids = request.data.get('ids', [])
     User.objects.filter(id__in=ids).delete()
     return Response({'deleted_ids': ids}, status=status.HTTP_204_NO_CONTENT)
