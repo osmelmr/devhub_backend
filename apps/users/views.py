@@ -3,9 +3,23 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import User
 from .serializers import UserSerializer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from devhub.permissions import IsAdminUser
 from devhub.pagination import StandardResultsSetPagination
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def me(request):
+    user = request.user  # DRF rellena este objeto gracias al token JWT
+    return Response({
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "role": user.role,
+    })
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticatedOrReadOnly])
