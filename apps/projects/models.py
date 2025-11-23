@@ -12,7 +12,8 @@ class Project(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
-    description = models.TextField()
+    short_description = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
     thumbnail = models.URLField(blank=True, null=True)
     tech_stack = models.JSONField(default=list)  # ej: ["React", "TypeScript"]
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
@@ -27,6 +28,7 @@ class Project(models.Model):
 # id: Identificador único del proyecto (UUID), clave primaria, no editable
 # title: Nombre del proyecto, obligatorio, máximo 255 caracteres
 # slug: URL amigable y único del proyecto, ej: /projects/todo
+# short_description: Breve resumen del proyecto, pensado para listados o vistas previas (máx. 255 caracteres)
 # description: Breve descripción del proyecto, obligatorio
 # thumbnail: URL opcional de la imagen/miniatura representativa del proyecto
 # tech_stack: Lista de tecnologías usadas en el proyecto, por defecto lista vacía
