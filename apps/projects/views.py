@@ -85,7 +85,7 @@ def delete_project(request, pk):
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
-def bulk_delete_projects(request):
+def delete_projects(request):
     ids = request.data.get('ids', [])
     projects = Project.objects.filter(id__in=ids)
     for project in projects:
