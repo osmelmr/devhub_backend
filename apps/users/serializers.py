@@ -14,5 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'role',
+            'avatar_url', 
             'projects',
         ]
