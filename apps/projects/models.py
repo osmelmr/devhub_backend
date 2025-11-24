@@ -14,7 +14,8 @@ class Project(models.Model):
     slug = models.SlugField(unique=True)
     short_description = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    thumbnail = models.URLField(blank=True, null=True)
+    thumbnail_light = models.URLField(blank=True, null=True)
+    thumbnail_dark = models.URLField(blank=True, null=True)
     tech_stack = models.JSONField(default=list)  # ej: ["React", "TypeScript"]
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='projects')
