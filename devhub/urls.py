@@ -28,6 +28,5 @@ urlpatterns = [
     # My apis
     path('api/v1/users/', include('apps.users.urls')),
     path('api/v1/projects/', include('apps.projects.urls')),
-    path('api/v1/todos/', include('apps.todos.urls')),
     
 ]

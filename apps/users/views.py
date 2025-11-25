@@ -41,7 +41,7 @@ def retrieve_user(request, pk):
     return Response(serializer.data)
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticatedOrReadOnly, IsAdminUser])
+
 def create_user(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
