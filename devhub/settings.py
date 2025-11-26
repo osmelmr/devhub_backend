@@ -62,6 +62,8 @@ INSTALLED_APPS = [
     "apps.users",
     "apps.projects",
     # "apps.products"
+    "apps.pocket_store.categories",
+    "apps.pocket_store.products",
 ]
 
 MIDDLEWARE = [
