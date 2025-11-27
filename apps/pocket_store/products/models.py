@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from apps.pocket_store.categories.models import Category
+from apps.users.models import User
 
 class Product(models.Model):
 
@@ -8,6 +9,9 @@ class Product(models.Model):
         ACTIVE = "active", "Activo"
         INACTIVE = "inactive", "Inactivo"
         OUT_OF_STOCK = "out_of_stock", "Sin stock"
+
+    # --- Owner ---
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="products")
 
     # --- Información básica ---
     name = models.CharField(max_length=150)
