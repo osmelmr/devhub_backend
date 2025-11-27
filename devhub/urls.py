@@ -28,5 +28,7 @@ urlpatterns = [
     # My apis
     path('api/v1/users/', include('apps.users.urls')),
     path('api/v1/projects/', include('apps.projects.urls')),
+    path('api/v1/pocket-store/categories/', include('apps.pocket_store.categories.urls')),
+    path('api/v1/pocket-store/products/', include('apps.pocket_store.products.urls')),
     
 ]
