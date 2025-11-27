@@ -6,6 +6,7 @@ from .serializers import UserSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from devhub.permissions import IsAdminUser
 from devhub.pagination import StandardResultsSetPagination
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 @api_view(["GET"])
@@ -41,12 +42,21 @@ def retrieve_user(request, pk):
     return Response(serializer.data)
 
 @api_view(['POST'])
-
 def create_user(request):
     serializer = UserSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def register_user(request):
+    serializer = UserSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        refresh = RefreshToken.for_user(user)
+        access = refresh.access_token
+        return Response({"user": serializer.data,"access": str(access), "refresh":str(refresh)}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT', 'PATCH'])
