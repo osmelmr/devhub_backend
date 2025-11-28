@@ -20,4 +20,10 @@ class ProjectSerializer(serializers.ModelSerializer):
             'username',
             'created_at',
             'updated_at',
+            'thumbnail_dark_public_id',
+            'thumbnail_light_public_id',
         ]
+        extra_kwargs = {
+            'thumbnail_dark_public_id': {'write_only': True}, 
+            'thumbnail_light_public_id': {'write_only': True}
+        }

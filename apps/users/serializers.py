@@ -17,9 +17,11 @@ class UserSerializer(serializers.ModelSerializer):
             'avatar_url',
             'projects',
             'password',
+            'avatar_public_id',
         ]
         extra_kwargs = {
-            'password': {'write_only': True}  # Nunca devolver la contraseña
+            'password': {'write_only': True},  # Nunca devolver la contraseña
+            'avatar_public_id': {'write_only': True}
         }
 
     def create(self, validated_data):

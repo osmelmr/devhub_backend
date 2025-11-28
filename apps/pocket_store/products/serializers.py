@@ -22,10 +22,15 @@ class ProductSerializer(serializers.ModelSerializer):
             "rating",
             "status",
             "image",
+            "image_public_id",
             "created_at",
             "updated_at",
+            ""
         ]
         read_only_fields = ["slug", "category_name", "created_at", "updated_at"]
+        extra_kwargs = {
+            'image_public_id': {'write_only': True}
+        }
 
     # --- Validaciones que tú NO querías eliminar ---
     def validate_discount(self, value):

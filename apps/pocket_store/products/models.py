@@ -56,6 +56,7 @@ class Product(models.Model):
 
     # --- Imagen ---
     image = models.URLField(blank=True, null=True)
+    image_public_id = models.CharField(max_length=500, blank=True, null=True)
 
     # --- Fechas ---
     created_at = models.DateTimeField(auto_now_add=True)
