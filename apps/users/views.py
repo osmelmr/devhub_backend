@@ -20,6 +20,7 @@ def me(request):
         "first_name": user.first_name,
         "last_name": user.last_name,
         "role": user.role,
+        "avatar_url": user.avatar_url,
     })
 
 @api_view(['GET'])
