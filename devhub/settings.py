@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os, environ
+import cloudinary
+
+cloudinary.config(
+    cloud_name="dctwk3rlf",
+    api_key="823649744579332",
+    api_secret="4UTgLQ3z6Z_VYHQYZsPL29RG2Bk"
+)
+
 
 # Inicializa el entorno
 env = environ.Env(
