@@ -103,7 +103,9 @@ PROVIDERS = {
 @api_view(["POST"])
 def social_login(request):
     provider = request.data.get("provider")
-    token = request.data.get("id_token") or request.data.get("access_token")
+    token = request.data.get("token")
+    print(provider)
+    print(token)
     
     if not provider or not token:
         return Response({"detail": "provider y token son requeridos"}, status=400)
@@ -113,6 +115,7 @@ def social_login(request):
         # Intenta con id_token primero, luego con access_token
         user_data = verify_google_token(token)
         if not user_data:
+            print("no es id_token")
             user_data = verify_google_access_token(token)
     elif provider == "github":
         user_data = verify_github_token(token)
