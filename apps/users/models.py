@@ -1,4 +1,4 @@
-from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin, BaseUserManager)
+from django.contrib.auth.models import (AbstractUser, BaseUserManager)
 from django.db import models
 import uuid
 
@@ -28,7 +28,7 @@ class UserManager(BaseUserManager):
 
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractUser):
     ROLE_CHOICES = [
         ('admin', 'Admin'),
         ('viewer', 'Viewer'),
@@ -40,9 +40,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     role             = models.CharField(max_length=10, choices=ROLE_CHOICES, default='viewer')
     avatar_url       = models.URLField(max_length=500, blank=True, null=True)
     avatar_public_id = models.CharField(max_length=500, blank=True, null=True)
-
-    is_active   = models.BooleanField(default=True)
-    is_staff    = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
