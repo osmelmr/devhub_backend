@@ -25,8 +25,8 @@ urlpatterns = [
     # Admin
     path("admin/", admin.site.urls),
     # Auth
-    path("api/v1/auth/token/", TokenObtainPairView.as_view()),
-    path("api/v1/auth/token/refresh/", TokenRefreshView.as_view()),
+    path("api/v1/users/auth/login/", TokenObtainPairView.as_view()),
+    path("api/v1/users/auth/token/refresh/", TokenRefreshView.as_view()),
     # Doc
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
