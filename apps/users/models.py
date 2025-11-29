@@ -41,6 +41,8 @@ class User(AbstractUser):
     avatar_url       = models.URLField(max_length=500, blank=True, null=True)
     avatar_public_id = models.CharField(max_length=500, blank=True, null=True)
 
+    objects = UserManager()
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
