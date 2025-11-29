@@ -12,7 +12,7 @@ User = get_user_model()
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def me(request):
-    user = request.user  # DRF rellena este objeto gracias al token JWT
+    user = request.user
     return Response({
         "id": user.id,
         "username": user.username,
@@ -35,18 +35,41 @@ def register_user(request):
 
 # Authenticaciones externas
 
-def verify_google_token(token):
-    url = f"https://oauth2.googleapis.com/tokeninfo?id_token={token}"
+def verify_google_token(id_token):
+    """Verifica un ID_TOKEN de Google"""
+    url = f"https://oauth2.googleapis.com/tokeninfo?id_token={id_token}"
     res = requests.get(url)
+    
     if res.status_code != 200:
         return None
+    
     data = res.json()
     if "email" not in data:
         return None
+    
     return {
         "email": data["email"],
-        "name": data.get("name", ""),
-        "avatar": data.get("picture", "")
+        "first_name": data.get("name", ""),
+        "avatar_url": data.get("picture", "")
+    }
+
+def verify_google_access_token(access_token):
+    """Verifica un ACCESS_TOKEN de Google"""
+    url = "https://www.googleapis.com/oauth2/v3/userinfo"
+    headers = {"Authorization": f"Bearer {access_token}"}
+    res = requests.get(url, headers=headers)
+    
+    if res.status_code != 200:
+        return None
+    
+    data = res.json()
+    if "email" not in data:
+        return None
+    
+    return {
+        "email": data["email"],
+        "first_name": data.get("name", ""),
+        "avatar_url": data.get("picture", "")
     }
 
 def verify_github_token(token):
@@ -67,54 +90,63 @@ def verify_github_token(token):
         return None
     return {
         "email": email,
-        "name": data.get("login", ""),
-        "avatar": data.get("avatar_url", "")
+        "first_name": data.get("login", ""),
+        "avatar_url": data.get("avatar_url", "")
     }
 
-
+# PROVIDERS actualizados
 PROVIDERS = {
-    "google": verify_google_token,
-    "github": verify_github_token,
+    "google": verify_google_token,  # Para id_token
+    "google_access": verify_google_access_token,  # Para access_token
 }
 
 @api_view(["POST"])
 def social_login(request):
     provider = request.data.get("provider")
-    token = request.data.get("access_token") or request.data.get("id_token")
-
+    token = request.data.get("id_token") or request.data.get("access_token")
+    
     if not provider or not token:
         return Response({"detail": "provider y token son requeridos"}, status=400)
 
-    if provider not in PROVIDERS:
+    # Determinar qué función usar
+    if provider == "google":
+        # Intenta con id_token primero, luego con access_token
+        user_data = verify_google_token(token)
+        if not user_data:
+            user_data = verify_google_access_token(token)
+    elif provider == "github":
+        user_data = verify_github_token(token)
+    else:
         return Response({"detail": "Proveedor no soportado"}, status=400)
 
-    # Validar token con el proveedor
-    user_data = PROVIDERS[provider](token)
     if not user_data:
         return Response({"detail": "Token inválido"}, status=400)
 
-    # Crear o recuperar usuario
+    # Generar username si no viene en los datos
+    username = user_data.get("first_name") or user_data["email"].split('@')[0]
+    
+    # Crear o recuperar usuario - USANDO LOS CAMPOS CORRECTOS
     user, created = User.objects.get_or_create(
         email=user_data["email"],
         defaults={
-            "username": user_data["name"],
-            "avatar": user_data["avatar"],
+            "username": username,
+            "first_name": user_data.get("first_name", ""),
+            "avatar_url": user_data.get("avatar_url", ""),
         }
     )
 
     # Generar tokens JWT
     refresh = RefreshToken.for_user(user)
-
+    
     return Response({
         "access": str(refresh.access_token),
         "refresh": str(refresh),
         "user": {
+            "id": str(user.id),
             "email": user.email,
             "username": user.username,
-            "avatar": user.avatar,
+            "first_name": user.first_name,
+            "avatar_url": user.avatar_url,
         },
         "is_new": created
     })
-
-
-
