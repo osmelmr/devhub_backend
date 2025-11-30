@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     # "apps.products"
     "apps.pocket_store.categories",
     "apps.pocket_store.products",
+    "apps.pocket_store.cart",
 ]
 
 MIDDLEWARE = [
