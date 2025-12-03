@@ -13,7 +13,7 @@ from django.db.models import Q
 # Create your views here.
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def list_categories(request):
     user = request.user
 

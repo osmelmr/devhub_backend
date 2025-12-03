@@ -6,9 +6,9 @@ from .views import (
 )
 
 urlpatterns = [
-    path('cart/', get_cart),
-    path('cart/add/', add_to_cart),
-    path('cart/increase/', increase_quantity),
-    path('cart/decrease/', decrease_quantity),
-    path('cart/remove/', remove_from_cart),
+    path('', get_cart),
+    path('add/', add_to_cart),
+    path('increase/', increase_quantity),
+    path('decrease/', decrease_quantity),
+    path('remove/', remove_from_cart),
 ]

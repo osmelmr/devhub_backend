@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Product
@@ -13,14 +13,26 @@ from django.db.models import Q
 # Create your views here.
 
 @api_view(["GET"])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 def list_products(request):
     user = request.user
-
-    if user.role == "admin":
-        products = Product.objects.all()
+    print("AAAAAAAAAAAAAAAAAAAAA")
+    print(user)
+    # products = Product.objects.all()
+    if request.user.is_authenticated:
+        if user.role == "admin":
+            print("si eres admin")
+            products = Product.objects.all()
+            serializer = ProductSerializer(products, many=True)
+            return Response(serializer.data)
+        else:
+            products = Product.objects.filter(Q(owner=user) | Q(owner__role="admin"))
+            serializer = ProductSerializer(products, many=True)
+            return Response(serializer.data)
     else:
-        products = Product.objects.filter(Q(owner=user) | Q(owner__role="admin"))
+        products = Product.objects.filter(owner__role="admin")
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
 
     products = filter_products(products, request.query_params)
     products = search_products(products, request.query_params)

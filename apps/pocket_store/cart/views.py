@@ -98,7 +98,7 @@ def remove_from_cart(request):
     return Response(CartSerializer(cart).data)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def get_cart(request):
     user = request.user
     cart = get_or_create_cart(user)

@@ -36,5 +36,6 @@ urlpatterns = [
     path('api/v1/projects/', include('apps.projects.urls')),
     path('api/v1/pocket-store/categories/', include('apps.pocket_store.categories.urls')),
     path('api/v1/pocket-store/products/', include('apps.pocket_store.products.urls')),
+    path('api/v1/pocket-store/cart/', include('apps.pocket_store.cart.urls')),
     
 ]

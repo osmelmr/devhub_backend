@@ -4,6 +4,7 @@ from .models import Product
 class ProductSerializer(serializers.ModelSerializer):
     final_price = serializers.ReadOnlyField()
     owner = serializers.ReadOnlyField(source="owner.id")
+    owner_name = serializers.ReadOnlyField(source="owner.first_name")
 
     class Meta:
         model = Product
@@ -25,7 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "image_public_id",
             "created_at",
             "updated_at",
-            ""
+            "owner_name",
         ]
         read_only_fields = ["slug", "category_name", "created_at", "updated_at"]
         extra_kwargs = {
